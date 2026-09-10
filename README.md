@@ -1,17 +1,23 @@
-# Nirikshak AI — MPLADS Risk Intelligence & Governance Platform
+# VyayRakshak — MPLADS Risk Intelligence & Governance Platform
 
-**SIH102 Prototype · Decision-Support System · Demo Data**
+**SIH26102 Prototype · Decision-Support System · Demo Data**
 
 An AI-powered decision-support platform for monitoring MPLADS development works.
-Nirikshak AI analyses project, financial, progress and evidence data to identify
+VyayRakshak analyses project, financial, progress and evidence data to identify
 **anomalies**, assign an **explainable risk score**, and help authorities
 **prioritise the works that require human verification**.
 
-> Nirikshak AI is a decision-support system. AI-generated risk indicators are
+> VyayRakshak is a decision-support system. AI-generated risk indicators are
 > decision-support signals and **do not establish fraud or wrongdoing**. All
 > flagged cases require human verification. Demo data is illustrative and is not
 > connected to an authoritative Government data source. This is not an official
 > Government of India platform.
+
+> 👩‍💻 **Teammates — start with [ARCHITECTURE.md](./ARCHITECTURE.md).** It's a
+> full code walkthrough: how the app fits together, the risk engine, the data
+> layer, i18n, the chatbot, the design system, and "how do I…" recipes.
+
+**Live:** https://vyayrakshak.vercel.app · **Team Synaptix · SIH26102**
 
 ---
 
@@ -69,22 +75,22 @@ npm run lint       # next lint
 
 | Route | Description |
 |-------|-------------|
-| `/` | Landing: hero, metrics, problem, 6-step process, 8 AI detectors, explainable risk, roadmap, FAQ |
-| `/dashboard` | Intelligence console: metrics + 6 charts + priority works |
-| `/projects` | Project Explorer: search, filter, sort, paginate |
-| `/projects/[id]` | Project risk dossier with 7 working tabs |
-| `/financial` | Financial intelligence + March-rush indicator |
-| `/progress` | Financial-vs-physical progress mismatches |
-| `/evidence` | Evidence verification: demo upload + image comparison |
-| `/agencies`, `/agencies/[id]` | Agency intelligence + profiles |
-| `/constituencies` | Constituency-level intelligence |
-| `/map` | Geospatial risk canvas with district drill-down |
-| `/investigation` | Detect → Explain → Review → Verify → Resolve + AI dossier generation |
-| `/report` | Anonymous citizen reporting (rate-limited) |
-| `/login` | Role-based demo login |
-| `/inspection` | Mobile-first field inspection mode |
+| `/` | Landing: hero, metrics, problem, process, 9 AI detectors, explainable risk, motion band, roadmap, FAQ, embedded explainer |
+| `/dashboard` | Intelligence console: KPIs + charts + priority works |
+| `/projects` · `/projects/[id]` | Project Explorer + risk dossier (7 tabs) |
+| `/unified` | Cross-signal analysis + **downloadable PDF/JSON report** |
+| `/map` | Geospatial risk map with district drill-down |
+| `/investigation` | Detect → Verify → Resolve + AI dossier generation |
+| `/test` | Live "Test a Work" scoring through the real engine |
+| `/evidence` | Evidence verification: demo upload + hash comparison |
+| `/financial` · `/progress` | Financial & progress intelligence |
+| `/agencies` · `/agencies/[id]` | Agency intelligence + profiles |
+| `/constituencies` · `/compare` | Constituency intel · compare two works |
+| `/data-sourcing` | The "real vs synthetic" honesty page |
+| `/showcase` | Full-screen interactive explainer |
+| `/report` · `/login` · `/inspection` | Anonymous report · demo login · field mode |
 
-The **"Ask Nirikshak AI"** assistant is available on every page.
+The **"Ask VyayRakshak"** assistant is available on every page.
 
 ## Project structure
 

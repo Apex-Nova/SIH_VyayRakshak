@@ -1,0 +1,270 @@
+// ─── Nirikshak AI — Prisma schema ───────────────────────────────────────────
+// This schema models the MPLADS domain for the "scale to real data" story.
+// The demo runs on the in-memory generated dataset (src/lib/data) and does NOT
+// require a database. Provision PostgreSQL and run `prisma migrate` only when
+// integrating an authoritative data source.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  DISTRICT_AUTHORITY
+  AUDITOR
+  FIELD_INSPECTOR
+  ANALYST
+  CITIZEN
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum WorkStatus {
+  RECOMMENDED
+  SANCTIONED
+  IN_PROGRESS
+  COMPLETED
+  DELAYED
+  STALLED
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  role      Role     @default(ANALYST)
+  createdAt DateTime @default(now())
+  auditLogs AuditLog[]
+  aiQueries AIQuery[]
+}
+
+model State {
+  id            String         @id
+  name          String
+  code          String
+  districts     District[]
+  constituencies Constituency[]
+  projects      Project[]
+}
+
+model District {
+  id       String    @id @default(cuid())
+  name     String
+  stateId  String
+  state    State     @relation(fields: [stateId], references: [id])
+  projects Project[]
+}
+
+model Constituency {
+  id       String    @id @default(cuid())
+  name     String
+  stateId  String
+  state    State     @relation(fields: [stateId], references: [id])
+  mps      MP[]
+  projects Project[]
+}
+
+model MP {
+  id             String        @id @default(cuid())
+  name           String
+  house          String        // Lok Sabha / Rajya Sabha
+  constituencyId String?
+  constituency   Constituency? @relation(fields: [constituencyId], references: [id])
+}
+
+model ImplementingAgency {
+  id                String    @id @default(cuid())
+  name              String
+  type              String
+  avgCompletionDays Int       @default(0)
+  avgCostVariance   Float     @default(0)
+  anomalies         Int       @default(0)
+  riskLevel         RiskLevel @default(LOW)
+  projects          Project[]
+}
+
+model Project {
+  id                     String              @id @default(cuid())
+  projectCode            String              @unique
+  name                   String
+  description            String
+  sector                 String
+  subSector              String
+  status                 WorkStatus          @default(RECOMMENDED)
+  sanctionedAmount       Float
+  recommendedAmount      Float
+  startDate              DateTime?
+  expectedCompletionDate DateTime?
+  actualCompletionDate   DateTime?
+  latitude               Float?
+  longitude              Float?
+  financialYear          String
+
+  stateId                String
+  state                  State               @relation(fields: [stateId], references: [id])
+  districtId             String
+  district               District            @relation(fields: [districtId], references: [id])
+  constituencyId         String
+  constituency           Constituency        @relation(fields: [constituencyId], references: [id])
+  implementingAgencyId   String
+  implementingAgency     ImplementingAgency  @relation(fields: [implementingAgencyId], references: [id])
+
+  financials             ProjectFinancial[]
+  progressRecords        ProjectProgress[]
+  evidence               ProjectEvidence[]
+  documents              ProjectDocument[]
+  riskAssessments        RiskAssessment[]
+  anomalies              Anomaly[]
+  investigations         Investigation[]
+
+  createdAt              DateTime            @default(now())
+  updatedAt              DateTime            @updatedAt
+}
+
+model ProjectFinancial {
+  id                    String  @id @default(cuid())
+  projectId             String
+  project               Project @relation(fields: [projectId], references: [id])
+  sanctionedAmount      Float
+  releasedAmount        Float
+  expenditure           Float
+  unspentAmount         Float
+  interest              Float   @default(0)
+  utilizationPercentage Float
+  financialYear         String
+}
+
+model ProjectProgress {
+  id               String     @id @default(cuid())
+  projectId        String
+  project          Project    @relation(fields: [projectId], references: [id])
+  physicalProgress Float
+  reportedProgress Float
+  milestone        String?
+  status           WorkStatus
+  delayDays        Int        @default(0)
+  recordedAt       DateTime   @default(now())
+}
+
+model ProjectEvidence {
+  id                 String   @id @default(cuid())
+  projectId          String
+  project            Project  @relation(fields: [projectId], references: [id])
+  fileUrl            String?
+  latitude           Float?
+  longitude          Float?
+  timestamp          DateTime?
+  hash               String?
+  similarityScore    Float    @default(0)
+  verificationStatus String   @default("REVIEW_REQUIRED")
+}
+
+model ProjectDocument {
+  id        String  @id @default(cuid())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
+  name      String
+  type      String
+  present   Boolean @default(false)
+}
+
+model RiskAssessment {
+  id             String    @id @default(cuid())
+  projectId      String
+  project        Project   @relation(fields: [projectId], references: [id])
+  totalScore     Int
+  riskLevel      RiskLevel
+  financialScore Int
+  progressScore  Int
+  costScore      Int
+  timelineScore  Int
+  evidenceScore  Int
+  agencyScore    Int
+  geospatialScore Int
+  explanation    String
+  confidence     Float     @default(0.7)
+  createdAt      DateTime  @default(now())
+  factors        RiskFactor[]
+}
+
+model RiskFactor {
+  id               String         @id @default(cuid())
+  assessmentId     String
+  assessment       RiskAssessment @relation(fields: [assessmentId], references: [id])
+  key              String
+  label            String
+  contribution     Int
+  weight           Float
+  detail           String
+}
+
+model Anomaly {
+  id        String   @id @default(cuid())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id])
+  category  String
+  label     String
+  detail    String
+  severity  RiskLevel
+  createdAt DateTime @default(now())
+}
+
+model Investigation {
+  id          String       @id @default(cuid())
+  projectId   String
+  project     Project      @relation(fields: [projectId], references: [id])
+  status      String       @default("OPEN")
+  assignedTo  String?
+  createdAt   DateTime     @default(now())
+  inspections Inspection[]
+}
+
+model Inspection {
+  id              String        @id @default(cuid())
+  investigationId String
+  investigation   Investigation @relation(fields: [investigationId], references: [id])
+  inspectorId     String?
+  verdict         String?       // PASS / FAIL / REVIEW
+  checklist       Json?
+  notes           String?
+  createdAt       DateTime      @default(now())
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  projectRef  String?
+  location    String?
+  issueType   String
+  description String
+  reference   String   @unique
+  createdAt   DateTime @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  action    String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
+
+model AIQuery {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  query     String
+  answer    String
+  provider  String
+  createdAt DateTime @default(now())
+}

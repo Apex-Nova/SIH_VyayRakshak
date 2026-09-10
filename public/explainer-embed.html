@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VyayRakshak — Explainer Video & Motion Showcase</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#F3ECD9',
+            'cream-light': '#FAF6ED',
+            'cream-dark': '#E5DCBE',
+            saffron: '#F5900A',
+            'saffron-glow': '#FFB03A',
+            teal: '#1F5D66',
+            'teal-light': '#2C7A86',
+            'teal-dark': '#133D43',
+            espresso: '#3A2A1E',
+            'espresso-muted': '#6B5A4D'
+          },
+          fontFamily: {
+            serif: ['Fraunces', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: transparent;
+      color: #3A2A1E;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    .video-viewport {
+      aspect-ratio: 16 / 9;
+      position: relative;
+      background-color: #F3ECD9;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(245, 144, 10, 0.15);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .paper-grain {
+      background-image: radial-gradient(rgba(58, 42, 30, 0.04) 1px, transparent 0);
+      background-size: 16px 16px;
+    }
+
+    @keyframes scanBeam {
+      0% { transform: translateY(-100%); opacity: 0; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(320%); opacity: 0; }
+    }
+    .scanner-line {
+      animation: scanBeam 2.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.06); opacity: 1; filter: drop-shadow(0 0 12px rgba(245, 144, 10, 0.5)); }
+    }
+    .pulse-glow {
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+
+    @keyframes conveyorMove {
+      0% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -40; }
+    }
+    .conveyor-belt-track {
+      stroke-dasharray: 8 6;
+      animation: conveyorMove 1.2s linear infinite;
+    }
+
+    @keyframes floatPaper {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(-1deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    .floating-element {
+      animation: floatPaper 3s ease-in-out infinite;
+    }
+
+    .scene-fade {
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scene-hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.97) translateY(8px);
+      position: absolute;
+      inset: 0;
+    }
+    .scene-active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1) translateY(0px);
+      position: relative;
+    }
+  </style>
+</head>
+<body class="flex items-center justify-center p-0 selection:bg-saffron selection:text-white">
+
+  
+
+  <main class="w-full max-w-6xl mx-auto">
+    <div class="video-viewport flex flex-col justify-between select-none">
+      
+      <!-- Top Video Brand Banner -->
+      <div class="absolute top-0 left-0 right-0 z-30 px-6 py-3.5 flex items-center justify-between border-b border-espresso/10 bg-cream/85 backdrop-blur-md">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-2.5 rounded-full bg-saffron animate-pulse"></div>
+          <span class="font-serif font-semibold text-teal uppercase text-[11px] tracking-wider">MoSPI Innovation Showcase</span>
+          <span class="text-espresso/40">•</span>
+          <span id="sceneBadge" class="text-xs font-mono font-semibold text-espresso-muted">Scene 1 of 6</span>
+        </div>
+        <div class="flex items-center gap-3 text-xs font-mono text-espresso-muted">
+          <span id="timeElapsed">00:00</span> / <span id="timeTotal">01:00</span>
+          <button id="soundToggleBtn" class="p-1.5 px-2 rounded-md hover:bg-cream-dark transition text-espresso font-semibold flex items-center gap-1">
+            🔊 Sound On
+          </button>
+        </div>
+      </div>
+
+      <!-- Background Canvas: Topographic contour lines drifting + ambient nodes -->
+      <canvas id="canvasFx" class="absolute inset-0 z-10 pointer-events-none w-full h-full"></canvas>
+
+      <!-- Video Scenes Stage -->
+      <div class="relative w-full h-full pt-14 pb-20 px-6 md:px-10 z-20 flex items-center justify-center paper-grain">
+        
+        <!-- SCENE 1: The Problem (eSAKSHI Passive Records vs Fraud Gap) -->
+        <section id="scene-0" class="scene-fade scene-active w-full h-full flex flex-col items-center justify-center text-center">
+          <div class="max-w-3xl mx-auto space-y-4 md:space-y-5">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-saffron/15 text-saffron font-mono text-xs font-semibold">
+              ⚠️ The Oversight Blindspot
+            </div>
+            <h2 class="font-serif text-2xl md:text-4xl lg:text-5xl font-bold text-espresso tracking-tight leading-tight">
+              Crores in Public Funds.<br>
+              <span class="text-teal underline decoration-saffron decoration-4 underline-offset-4">Millions of Records. Zero Active Check.</span>
+            </h2>
+            <p class="text-xs md:text-base text-espresso-muted max-w-2xl mx-auto font-normal">
+              India's MPLADS sanctions thousands of works via <span class="font-semibold text-teal">eSAKSHI</span>. But the portal only stores text — it cannot flag inflated costs, duplicate bills, or recycled photos.
+            </p>
+
+            <!-- Interactive visual infographic with live discrepancy ticker -->
+            <div class="grid grid-cols-3 gap-3 md:gap-4 pt-2 max-w-2xl mx-auto w-full">
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-3 md:p-4 shadow-sm text-left relative overflow-hidden">
+                <div class="text-2xl mb-1 floating-element">📂</div>
+                <div class="text-[10px] md:text-xs font-mono uppercase text-espresso/60 font-semibold">Manual Audits</div>
+                <div class="text-xs md:text-sm font-bold text-espresso">&lt; 2% sampled</div>
+                <div class="w-full bg-espresso/10 h-1 mt-2 rounded-full overflow-hidden">
+                  <div class="bg-espresso/50 h-full w-[2%]"></div>
+                </div>
+              </div>
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-3 md:p-4 shadow-sm text-left relative overflow-hidden">
+                <div class="text-2xl mb-1 floating-element" style="animation-delay: 0.5s;">⏱️</div>
+                <div class="text-[10px] md:text-xs font-mono uppercase text-espresso/60 font-semibold">Discovery Delay</div>
+                <div class="text-xs md:text-sm font-bold text-saffron">14 to 36 Months</div>
+                <div class="w-full bg-espresso/10 h-1 mt-2 rounded-full overflow-hidden">
+                  <div class="bg-saffron h-full w-[80%] animate-pulse"></div>
+                </div>
+              </div>
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-3 md:p-4 shadow-sm text-left relative overflow-hidden">
+                <div class="text-2xl mb-1 floating-element" style="animation-delay: 1s;">📸</div>
+                <div class="text-[10px] md:text-xs font-mono uppercase text-espresso/60 font-semibold">Evidence Loop</div>
+                <div class="text-xs md:text-sm font-bold text-teal">Doctored Uploads</div>
+                <div class="w-full bg-espresso/10 h-1 mt-2 rounded-full overflow-hidden">
+                  <div class="bg-teal h-full w-[65%]"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCENE 2: The Core Concept: Process Conveyor Motif -->
+        <section id="scene-1" class="scene-fade scene-hidden w-full h-full flex flex-col items-center justify-center">
+          <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            
+            <div class="md:col-span-5 text-left space-y-3">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal/15 text-teal font-mono text-xs font-semibold">
+                💡 Zero-Migration Overlay
+              </div>
+              <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-espresso leading-tight">
+                From Raw Records into an <span class="text-saffron">Autonomous 0–100 Dial</span>
+              </h2>
+              <p class="text-xs md:text-sm text-espresso-muted">
+                VyayRakshak operates in read-only mode, extracting live sanction & completion files directly from the public dashboard without replacing eSAKSHI.
+              </p>
+              <div class="p-2.5 rounded-lg bg-cream-light border border-teal/20 text-xs font-mono text-teal-dark flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                <span>Streaming live API data: 120 works/min</span>
+              </div>
+            </div>
+
+            <!-- Animated Interactive Conveyor SVG Graphic -->
+            <div class="md:col-span-7 bg-white/80 border-2 border-espresso/15 rounded-2xl p-4 md:p-6 shadow-lg relative overflow-hidden backdrop-blur-sm">
+              <div class="text-xs font-mono text-espresso-muted mb-2 flex items-center justify-between">
+                <span>CONVEYOR TRANSFORMATION PIPELINE</span>
+                <span class="text-saffron font-bold text-[10px] bg-saffron/10 px-2 py-0.5 rounded">REAL-TIME INFERENCE</span>
+              </div>
+
+              <div class="relative w-full aspect-[16/9] flex items-center justify-center">
+                <!-- Conveyor Stage SVG -->
+                <svg id="conveyorSvg" viewBox="0 0 600 320" class="w-full h-full drop-shadow-md">
+                  <defs>
+                    <linearGradient id="beltGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#1F5D66" />
+                      <stop offset="50%" stop-color="#2C7A86" />
+                      <stop offset="100%" stop-color="#1F5D66" />
+                    </linearGradient>
+                    <linearGradient id="lensGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#F5900A" />
+                      <stop offset="100%" stop-color="#FFB03A" />
+                    </linearGradient>
+                    <radialGradient id="dialGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#F5900A" stop-opacity="0.35" />
+                      <stop offset="100%" stop-color="#F5900A" stop-opacity="0" />
+                    </radialGradient>
+                  </defs>
+
+                  <!-- 3D Conveyor Track -->
+                  <path d="M 60,180 L 260,180 L 260,205 L 60,205 Z" fill="#241B14" opacity="0.15" transform="translate(4, 6)" />
+                  <path d="M 60,175 L 430,175 L 470,210 L 100,210 Z" fill="url(#beltGrad)" />
+                  <line x1="65" y1="192" x2="445" y2="192" stroke="#FAF6ED" stroke-width="2" class="conveyor-belt-track" opacity="0.6" />
+
+                  <!-- Rollers -->
+                  <circle cx="80" cy="200" r="10" fill="#3A2A1E" opacity="0.7" />
+                  <circle cx="250" cy="200" r="10" fill="#3A2A1E" opacity="0.7" />
+                  <circle cx="430" cy="200" r="10" fill="#3A2A1E" opacity="0.7" />
+
+                  <!-- Animated Moving Paper Records -->
+                  <g id="movingPapersGroup">
+                    <!-- Paper 1 -->
+                    <g class="animated-paper" transform="translate(90, 140)">
+                      <rect width="45" height="58" rx="4" fill="#FAF6ED" stroke="#3A2A1E" stroke-width="1.5" />
+                      <line x1="8" y1="12" x2="37" y2="12" stroke="#3A2A1E" stroke-width="2" opacity="0.4" />
+                      <line x1="8" y1="20" x2="30" y2="20" stroke="#3A2A1E" stroke-width="1.5" opacity="0.3" />
+                      <line x1="8" y1="28" x2="34" y2="28" stroke="#3A2A1E" stroke-width="1.5" opacity="0.3" />
+                      <circle cx="34" cy="45" r="4" fill="#F5900A" opacity="0.7" />
+                    </g>
+                    <!-- Paper 2 -->
+                    <g class="animated-paper" transform="translate(180, 140)">
+                      <rect width="45" height="58" rx="4" fill="#FAF6ED" stroke="#3A2A1E" stroke-width="1.5" />
+                      <line x1="8" y1="12" x2="37" y2="12" stroke="#3A2A1E" stroke-width="2" opacity="0.4" />
+                      <line x1="8" y1="20" x2="28" y2="20" stroke="#3A2A1E" stroke-width="1.5" opacity="0.3" />
+                      <line x1="8" y1="28" x2="32" y2="28" stroke="#3A2A1E" stroke-width="1.5" opacity="0.3" />
+                      <circle cx="34" cy="45" r="4" fill="#1F5D66" opacity="0.7" />
+                    </g>
+                  </g>
+
+                  <!-- Giant Inspection Lens / AI Filter Portal -->
+                  <g transform="translate(260, 80)">
+                    <ellipse cx="25" cy="90" rx="35" ry="75" fill="none" stroke="#1F5D66" stroke-width="8" opacity="0.85" />
+                    <ellipse cx="25" cy="90" rx="30" ry="70" fill="#FAF6ED" fill-opacity="0.25" stroke="#F5900A" stroke-width="3" />
+                    <!-- Laser scanning line inside lens -->
+                    <line x1="25" y1="25" x2="25" y2="155" stroke="#F5900A" stroke-width="3" stroke-linecap="round" opacity="0.8">
+                      <animate attributeName="x1" values="5; 45; 5" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="x2" values="5; 45; 5" dur="2s" repeatCount="indefinite" />
+                    </line>
+                  </g>
+
+                  <!-- Glowing Output: 0-100 Dial Gauge -->
+                  <g transform="translate(450, 110)">
+                    <circle cx="60" cy="70" r="65" fill="url(#dialGlow)" />
+                    <!-- Gauge Arc Background -->
+                    <path d="M 20,80 A 45,45 0 0,1 100,80" fill="none" stroke="#E5DCBE" stroke-width="9" stroke-linecap="round" />
+                    <!-- Active Score Arc -->
+                    <path id="svgDialArc" d="M 20,80 A 45,45 0 0,1 88,42" fill="none" stroke="#F5900A" stroke-width="9" stroke-linecap="round" />
+                    
+                    <!-- Needle -->
+                    <g id="svgNeedle" transform="rotate(35, 60, 80)" class="transition-transform duration-500">
+                      <line x1="60" y1="80" x2="60" y2="44" stroke="#3A2A1E" stroke-width="3.5" stroke-linecap="round" />
+                      <circle cx="60" cy="80" r="6" fill="#3A2A1E" />
+                    </g>
+                    <!-- Score Counter Text -->
+                    <text x="60" y="105" font-family="'Fraunces', serif" font-weight="bold" font-size="22" fill="#3A2A1E" text-anchor="middle">84</text>
+                    <text x="60" y="118" font-family="'JetBrains Mono', monospace" font-size="9" fill="#1F5D66" text-anchor="middle" font-weight="bold">RISK SCORE</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SCENE 3: The 9 AI Detector Modules -->
+        <section id="scene-2" class="scene-fade scene-hidden w-full h-full flex flex-col items-center justify-center">
+          <div class="w-full max-w-5xl space-y-4 text-center">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-saffron/15 text-saffron font-mono text-xs font-semibold mb-1">
+                ⚙️ Comprehensive Intelligence
+              </div>
+              <h2 class="font-serif text-2xl md:text-4xl font-bold text-espresso">
+                The 9 Independent Detection Pillars
+              </h2>
+              <p class="text-xs md:text-sm text-espresso-muted">Every MPLADS sanction is audited across 9 concurrent analytical dimensions</p>
+            </div>
+
+            <!-- 9 Modular Detector Tiles -->
+            <div class="grid grid-cols-3 md:grid-cols-9 gap-2 md:gap-2.5 text-left">
+              <!-- Tile 1 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">💰</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">1. Financial Gap</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">₹ Dev. vs Median</div>
+                </div>
+                <div class="w-full bg-saffron/20 h-1 rounded-full overflow-hidden"><div class="bg-saffron h-full w-4/5 animate-pulse"></div></div>
+              </div>
+              <!-- Tile 2 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">📊</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">2. Progress Lag</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">Spend vs Site %</div>
+                </div>
+                <div class="w-full bg-teal/20 h-1 rounded-full overflow-hidden"><div class="bg-teal h-full w-3/5"></div></div>
+              </div>
+              <!-- Tile 3 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">⚖️</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">3. Hard Rules</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">Regulatory Caps</div>
+                </div>
+                <div class="w-full bg-emerald-500/20 h-1 rounded-full overflow-hidden"><div class="bg-emerald-600 h-full w-full"></div></div>
+              </div>
+              <!-- Tile 4 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">📄</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">4. Dup Texts</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">Levenshtein NLP</div>
+                </div>
+                <div class="w-full bg-saffron/20 h-1 rounded-full overflow-hidden"><div class="bg-saffron h-full w-11/12 animate-pulse"></div></div>
+              </div>
+              <!-- Tile 5 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">⏱️</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">5. Velocity Spike</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">Abnormal Speed</div>
+                </div>
+                <div class="w-full bg-teal/20 h-1 rounded-full overflow-hidden"><div class="bg-teal h-full w-2/3"></div></div>
+              </div>
+              <!-- Tile 6 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">🖼️</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">6. Photo Hash</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">dHash CV Match</div>
+                </div>
+                <div class="w-full bg-red-500/20 h-1 rounded-full overflow-hidden"><div class="bg-red-500 h-full w-5/6 animate-pulse"></div></div>
+              </div>
+              <!-- Tile 7 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">🏛️</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">7. Agency Graph</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">Repeat Flagged</div>
+                </div>
+                <div class="w-full bg-teal/20 h-1 rounded-full overflow-hidden"><div class="bg-teal h-full w-1/2"></div></div>
+              </div>
+              <!-- Tile 8 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">📍</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">8. Geo Cluster</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">GPS Proximity</div>
+                </div>
+                <div class="w-full bg-saffron/20 h-1 rounded-full overflow-hidden"><div class="bg-saffron h-full w-3/4"></div></div>
+              </div>
+              <!-- Tile 9 -->
+              <div class="bg-cream-light/90 border border-espresso/15 rounded-xl p-2.5 hover:border-saffron transition shadow-sm flex flex-col justify-between h-28">
+                <div class="text-xl">📅</div>
+                <div>
+                  <div class="font-bold text-[10px] md:text-[11px] text-espresso">9. March Rush</div>
+                  <div class="text-[9px] text-espresso-muted font-mono">Fiscal Year End</div>
+                </div>
+                <div class="w-full bg-red-500/20 h-1 rounded-full overflow-hidden"><div class="bg-red-500 h-full w-4/5 animate-pulse"></div></div>
+              </div>
+            </div>
+
+            <!-- Mathematical Formulation Banner -->
+            <div class="p-2.5 bg-white/80 border border-espresso/15 rounded-xl max-w-2xl mx-auto flex items-center justify-around font-mono text-xs text-espresso shadow-sm">
+              <span class="text-espresso/70">Raw Indicators</span>
+              <span class="text-saffron font-bold">➔</span>
+              <span class="text-espresso/70">Isolation Forest Weights</span>
+              <span class="text-saffron font-bold">➔</span>
+              <span class="font-bold text-teal">Composite 0–100 Audit Queue</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCENE 4: Evidence & Perceptual Hash CV Verification -->
+        <section id="scene-3" class="scene-fade scene-hidden w-full h-full flex flex-col items-center justify-center">
+          <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            
+            <div class="md:col-span-5 text-left space-y-3">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-saffron/15 text-saffron font-mono text-xs font-semibold">
+                🔍 Evidence Verification
+              </div>
+              <h2 class="font-serif text-2xl md:text-3xl lg:text-4xl font-bold text-espresso leading-tight">
+                Catching Photo Re-use Across Distinct Works
+              </h2>
+              <p class="text-xs md:text-sm text-espresso-muted">
+                Contractors often upload identical completion images for multiple road or tubewell projects. VyayRakshak's perceptual hash detects rotated, cropped, or slightly color-shifted duplicates.
+              </p>
+              <div class="space-y-1.5 text-xs font-mono">
+                <div class="p-2 rounded bg-cream-light border-l-4 border-red-500 text-espresso shadow-sm">
+                  <strong>Work #401:</strong> Chandauli CC Road Completion
+                </div>
+                <div class="p-2 rounded bg-cream-light border-l-4 border-saffron text-espresso shadow-sm">
+                  <strong>Work #912:</strong> Varanasi Tubewell Platform
+                </div>
+              </div>
+            </div>
+
+            <!-- Animated Interactive Perceptual Hash Scanner Canvas Graphic -->
+            <div class="md:col-span-7 bg-white rounded-2xl border-2 border-espresso/15 shadow-xl p-5 relative overflow-hidden">
+              <div class="flex items-center justify-between border-b border-espresso/10 pb-2 mb-3 font-mono text-xs">
+                <span class="font-bold text-teal">PERCEPTUAL HASH GRID MATCH</span>
+                <span class="px-2 py-0.5 rounded bg-red-100 text-red-600 font-bold animate-pulse">99.4% SIMILARITY</span>
+              </div>
+
+              <!-- Visual dual photo frames with simulated perceptual-hash matrix -->
+              <div class="relative flex items-center justify-center gap-4 py-2">
+                <!-- Photo Frame 1 -->
+                <div class="w-1/2 bg-cream-light p-2 rounded-xl border border-espresso/20 shadow-sm text-center relative">
+                  <div class="w-full aspect-[4/3] bg-teal/10 rounded-lg overflow-hidden relative flex flex-col items-center justify-center border border-teal/20">
+                    <svg viewBox="0 0 100 75" class="w-full h-full">
+                      <!-- Simulated site photo: road and trees -->
+                      <polygon points="0,55 50,20 100,55 100,75 0,75" fill="#C5D3C5" />
+                      <polygon points="35,75 48,35 52,35 65,75" fill="#8B9B90" />
+                      <circle cx="20" cy="25" r="8" fill="#F5900A" opacity="0.6" />
+                      <!-- Grid overlay -->
+                      <line x1="25" y1="0" x2="25" y2="75" stroke="#1F5D66" stroke-width="0.75" opacity="0.4" />
+                      <line x1="50" y1="0" x2="50" y2="75" stroke="#1F5D66" stroke-width="0.75" opacity="0.4" />
+                      <line x1="75" y1="0" x2="75" y2="75" stroke="#1F5D66" stroke-width="0.75" opacity="0.4" />
+                      <line x1="0" y1="25" x2="100" y2="25" stroke="#1F5D66" stroke-width="0.75" opacity="0.4" />
+                      <line x1="0" y1="50" x2="100" y2="50" stroke="#1F5D66" stroke-width="0.75" opacity="0.4" />
+                    </svg>
+                    <!-- Scanning laser line -->
+                    <div class="scanner-line absolute inset-x-0 h-1 bg-saffron shadow-[0_0_8px_#F5900A]"></div>
+                  </div>
+                  <div class="text-[10px] font-mono text-espresso-muted mt-1.5 font-semibold">Upload A (Sanction #401)</div>
+                </div>
+
+                <!-- Match Connector Badge -->
+                <div class="absolute z-10 w-10 h-10 rounded-full bg-saffron text-espresso font-bold text-xs flex items-center justify-center shadow-md border-2 border-white pulse-glow">
+                  ✓
+                </div>
+
+                <!-- Photo Frame 2 -->
+                <div class="w-1/2 bg-cream-light p-2 rounded-xl border border-espresso/20 shadow-sm text-center relative">
+                  <div class="w-full aspect-[4/3] bg-teal/10 rounded-lg overflow-hidden relative flex flex-col items-center justify-center border border-teal/20">
+                    <svg viewBox="0 0 100 75" class="w-full h-full">
+                      <!-- Slightly cropped duplicate photo -->
+                      <polygon points="0,52 48,18 100,52 100,75 0,75" fill="#C5D3C5" />
+                      <polygon points="32,75 46,33 50,33 68,75" fill="#8B9B90" />
+                      <circle cx="18" cy="23" r="8" fill="#F5900A" opacity="0.6" />
+                      <!-- Grid overlay -->
+                      <line x1="25" y1="0" x2="25" y2="75" stroke="#F5900A" stroke-width="0.75" opacity="0.4" />
+                      <line x1="50" y1="0" x2="50" y2="75" stroke="#F5900A" stroke-width="0.75" opacity="0.4" />
+                      <line x1="75" y1="0" x2="75" y2="75" stroke="#F5900A" stroke-width="0.75" opacity="0.4" />
+                      <line x1="0" y1="25" x2="100" y2="25" stroke="#F5900A" stroke-width="0.75" opacity="0.4" />
+                      <line x1="0" y1="50" x2="100" y2="50" stroke="#F5900A" stroke-width="0.75" opacity="0.4" />
+                    </svg>
+                    <!-- Scanner beam -->
+                    <div class="scanner-line absolute inset-x-0 h-1 bg-teal shadow-[0_0_8px_#1F5D66]" style="animation-delay: 1.4s;"></div>
+                  </div>
+                  <div class="text-[10px] font-mono text-espresso-muted mt-1.5 font-semibold">Upload B (Sanction #912)</div>
+                </div>
+              </div>
+
+              <!-- Output Flag Brief -->
+              <div class="mt-3 p-2 bg-cream-light rounded-lg border border-espresso/10 text-[11px] font-mono text-espresso flex items-center justify-between">
+                <span>Hash Fingerprint: <span class="text-teal font-bold">#a8f4c28e93</span></span>
+                <span class="text-red-600 font-bold">FLAGGED: GHOST RE-SUBMISSION</span>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SCENE 5: Competitive Advantage vs Rivals -->
+        <section id="scene-4" class="scene-fade scene-hidden w-full h-full flex flex-col items-center justify-center">
+          <div class="w-full max-w-4xl space-y-5 text-center">
+            <div>
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-teal/15 text-teal font-mono text-xs font-semibold mb-1">
+                🏆 Why Synaptix Wins
+              </div>
+              <h2 class="font-serif text-2xl md:text-4xl font-bold text-espresso">
+                GovTech Architectural Superiority
+              </h2>
+              <p class="text-xs md:text-sm text-espresso-muted">
+                Engineered specifically for SIH 2026 MoSPI problem statement #SIH26102
+              </p>
+            </div>
+
+            <!-- Comparison Table Matrix -->
+            <div class="bg-white/90 rounded-xl border border-espresso/15 shadow-sm overflow-hidden text-xs text-left">
+              <table class="w-full border-collapse">
+                <thead>
+                  <tr class="bg-cream-light border-b border-espresso/15 text-espresso font-mono uppercase text-[10px]">
+                    <th class="p-2.5 md:p-3">Evaluation Axis</th>
+                    <th class="p-2.5 md:p-3">Existing Portal</th>
+                    <th class="p-2.5 md:p-3">Competitor Approaches</th>
+                    <th class="p-2.5 md:p-3 bg-saffron/15 text-saffron-800 font-bold">VyayRakshak (Team Synaptix)</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-espresso/10 font-medium text-[11px] md:text-xs">
+                  <tr>
+                    <td class="p-2.5 md:p-3 font-semibold text-espresso">Integration Footprint</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">Passive Database</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">Requires Full Portal Migration</td>
+                    <td class="p-2.5 md:p-3 bg-saffron/5 font-bold text-teal">Zero-Migration REST Overlay</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 md:p-3 font-semibold text-espresso">Anomaly Detection</td>
+                    <td class="p-2.5 md:p-3 text-red-500 font-bold">None</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">Rigid Static Rules Only</td>
+                    <td class="p-2.5 md:p-3 bg-saffron/5 font-bold text-teal">Unsupervised Isolation Forest + dHash</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 md:p-3 font-semibold text-espresso">Baseline Accuracy</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">Flat National Mean</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">One-size-fits-all</td>
+                    <td class="p-2.5 md:p-3 bg-saffron/5 font-bold text-teal">Category, Topography & Geo-Adaptive</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5 md:p-3 font-semibold text-espresso">Explainable Audits</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">Manual Ledger Review</td>
+                    <td class="p-2.5 md:p-3 text-espresso/60">Opaque ML Scores</td>
+                    <td class="p-2.5 md:p-3 bg-saffron/5 font-bold text-teal">Natural-Language Evidence Dossier</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 text-xs text-espresso-muted font-mono pt-1">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> Python FastAPI Backbone</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-saffron"></span> Scikit-Learn Isolation Forest</span>
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-teal"></span> Transparent GovTech UI</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- SCENE 6: Impact & Pitch Call To Action -->
+        <section id="scene-5" class="scene-fade scene-hidden w-full h-full flex flex-col items-center justify-center text-center">
+          <div class="max-w-3xl mx-auto space-y-4 md:space-y-5">
+            <div class="w-16 h-16 rounded-2xl bg-teal text-saffron font-serif font-bold text-3xl flex items-center justify-center mx-auto shadow-xl pulse-glow border border-saffron/40">
+              🛡️
+            </div>
+            <h2 class="font-serif text-2xl md:text-4xl lg:text-5xl font-bold text-espresso tracking-tight leading-tight">
+              Safeguarding Every Rupee.<br>
+              <span class="text-saffron">Empowering Transparent Governance.</span>
+            </h2>
+            <p class="text-xs md:text-base text-espresso-muted max-w-xl mx-auto">
+              From reactive audits to autonomous proactive surveillance across all 543 constituencies. Built with pride for MoSPI by Team Synaptix.
+            </p>
+
+            <div class="pt-2 flex flex-wrap justify-center items-center gap-3">
+              <button id="replayBtn" class="px-5 py-2.5 rounded-xl bg-teal text-white font-semibold shadow-md hover:bg-teal-light transition flex items-center gap-2 text-sm">
+                <span>🔄 Replay Showcase</span>
+              </button>
+              <button onclick="jumpToScene(1)" class="px-5 py-2.5 rounded-xl bg-saffron text-espresso font-semibold shadow-md hover:bg-saffron-glow transition flex items-center gap-2 text-sm">
+                <span>⚙️ Inspect Pipeline</span>
+              </button>
+            </div>
+
+            <div class="pt-2 text-xs font-mono text-espresso/60">
+              Smart India Hackathon 2026 • Problem Statement SIH26102 • Autonomous Vigilance
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Voiceover Subtitle Banner -->
+      <div class="absolute bottom-12 left-0 right-0 z-30 px-6 py-2.5 bg-espresso/90 backdrop-blur-md text-center text-cream border-t border-white/10 transition-all">
+        <p id="voiceoverText" class="text-xs md:text-sm font-medium tracking-wide max-w-4xl mx-auto leading-snug text-cream/90">
+          Loading narration...
+        </p>
+      </div>
+
+      <!-- Bottom Playback Timeline & Controls -->
+      <div class="absolute bottom-0 left-0 right-0 z-30 h-12 bg-cream-dark/95 border-t border-espresso/15 px-6 flex items-center justify-between gap-4">
+        <!-- Play / Pause / Nav -->
+        <div class="flex items-center gap-2">
+          <button id="playPauseBtn" class="w-8 h-8 rounded-full bg-saffron text-espresso font-bold flex items-center justify-center hover:bg-saffron-glow transition shadow-sm" title="Play/Pause">
+            ⏸
+          </button>
+          <button id="prevSceneBtn" class="text-espresso hover:text-saffron transition font-mono text-xs font-semibold px-2 py-1" title="Previous Scene">
+            ⏮ Prev
+          </button>
+          <button id="nextSceneBtn" class="text-espresso hover:text-saffron transition font-mono text-xs font-semibold px-2 py-1" title="Next Scene">
+            Next ⏭
+          </button>
+        </div>
+
+        <!-- Scrubber Bar with Scene Tick Markers -->
+        <div class="flex-1 relative flex items-center cursor-pointer group" id="progressBarContainer">
+          <div class="w-full bg-espresso/20 h-2 rounded-full overflow-hidden relative">
+            <div id="videoProgressBar" class="bg-saffron h-full w-[0%] transition-all duration-100 ease-linear rounded-full"></div>
+          </div>
+          <!-- Scene Ticks -->
+          <div class="absolute inset-0 flex justify-between pointer-events-none px-0.5">
+            <div class="w-1.5 h-2 bg-espresso/30 rounded-full"></div>
+            <div class="w-1.5 h-2 bg-espresso/30 rounded-full"></div>
+            <div class="w-1.5 h-2 bg-espresso/30 rounded-full"></div>
+            <div class="w-1.5 h-2 bg-espresso/30 rounded-full"></div>
+            <div class="w-1.5 h-2 bg-espresso/30 rounded-full"></div>
+            <div class="w-1.5 h-2 bg-espresso/30 rounded-full"></div>
+          </div>
+        </div>
+
+        <!-- Scene selector pills -->
+        <div class="hidden md:flex items-center gap-1.5 text-[11px] font-mono">
+          <button onclick="jumpToScene(0)" class="scene-indicator px-2 py-0.5 rounded bg-saffron text-white font-bold transition">1</button>
+          <button onclick="jumpToScene(1)" class="scene-indicator px-2 py-0.5 rounded bg-espresso/10 hover:bg-espresso/20 transition">2</button>
+          <button onclick="jumpToScene(2)" class="scene-indicator px-2 py-0.5 rounded bg-espresso/10 hover:bg-espresso/20 transition">3</button>
+          <button onclick="jumpToScene(3)" class="scene-indicator px-2 py-0.5 rounded bg-espresso/10 hover:bg-espresso/20 transition">4</button>
+          <button onclick="jumpToScene(4)" class="scene-indicator px-2 py-0.5 rounded bg-espresso/10 hover:bg-espresso/20 transition">5</button>
+          <button onclick="jumpToScene(5)" class="scene-indicator px-2 py-0.5 rounded bg-espresso/10 hover:bg-espresso/20 transition">6</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Pitch Companion Notes -->
+  
+
+  <script>
+    const scenes = [
+      {
+        id: 0,
+        name: "1: The Problem",
+        duration: 9.0,
+        subtitles: "MPLADS sanctions over ₹4,000 crores annually through eSAKSHI. But the system only logs records—leaving fraud and duplicate bills undetected."
+      },
+      {
+        id: 1,
+        name: "2: Conveyor Transformation",
+        duration: 11.0,
+        subtitles: "VyayRakshak transforms raw paper records through an intelligent scanning lens directly into an autonomous 0–100 risk dial with zero migration friction."
+      },
+      {
+        id: 2,
+        name: "3: The 9 Modules",
+        duration: 11.0,
+        subtitles: "Nine concurrent engines evaluate every order: budget deviations, timeline lags, duplicate NLP, perceptual photo hashing, and March velocity spikes."
+      },
+      {
+        id: 3,
+        name: "4: Photographic Verification",
+        duration: 11.0,
+        subtitles: "Perceptual hashing flags contractors who recycle identical project photos across different constituencies, catching ghost works instantly."
+      },
+      {
+        id: 4,
+        name: "5: GovTech Edge",
+        duration: 10.0,
+        subtitles: "Unlike monolithic replacements, Synaptix delivers a zero-migration overlay with category-adaptive statistical baselines and explainable briefs."
+      },
+      {
+        id: 5,
+        name: "6: SIH 2026 Pitch",
+        duration: 9.0,
+        subtitles: "VyayRakshak: Safeguarding every single rupee of public money. Built for MoSPI by Team Synaptix."
+      }
+    ];
+
+    const totalDuration = scenes.reduce((acc, s) => acc + s.duration, 0);
+    let currentTime = 0;
+    let isPlaying = true;
+    let soundEnabled = true;
+    let lastTimestamp = null;
+    let activeSceneIdx = 0;
+    let isHeroConveyorMode = false;
+
+    // Web Audio Synthesizer for pleasant UI chimes
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq = 440, type = 'sine', duration = 0.2) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.035, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Fallback for strict autoplay policies
+      }
+    }
+
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const prevSceneBtn = document.getElementById('prevSceneBtn');
+    const nextSceneBtn = document.getElementById('nextSceneBtn');
+    const replayBtn = document.getElementById('replayBtn');
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const progressBar = document.getElementById('videoProgressBar');
+    const progressContainer = document.getElementById('progressBarContainer');
+    const timeElapsedEl = document.getElementById('timeElapsed');
+    const timeTotalEl = document.getElementById('timeTotal');
+    const voiceoverTextEl = document.getElementById('voiceoverText');
+    const sceneBadgeEl = document.getElementById('sceneBadge');
+    const indicators = document.querySelectorAll('.scene-indicator');
+    const heroModeToggleBtn = document.getElementById('heroModeToggleBtn');
+    const heroModeLabel = document.getElementById('heroModeLabel');
+
+    function formatTime(secs) {
+      const m = Math.floor(secs / 60);
+      const s = Math.floor(secs % 60);
+      return `${m < 10 ? '0' : ''}${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    timeTotalEl.textContent = formatTime(totalDuration);
+
+    function getSceneAtTime(t) {
+      let accum = 0;
+      for (let i = 0; i < scenes.length; i++) {
+        if (t >= accum && t < accum + scenes[i].duration) {
+          return { index: i, scene: scenes[i], offset: t - accum };
+        }
+        accum += scenes[i].duration;
+      }
+      return { index: scenes.length - 1, scene: scenes[scenes.length - 1], offset: scenes[scenes.length - 1].duration };
+    }
+
+    function getSceneStartTime(idx) {
+      let t = 0;
+      for (let i = 0; i < idx; i++) {
+        t += scenes[i].duration;
+      }
+      return t;
+    }
+
+    function switchScene(newIdx) {
+      if (newIdx === activeSceneIdx) return;
+      
+      const currentEl = document.getElementById(`scene-${activeSceneIdx}`);
+      const nextEl = document.getElementById(`scene-${newIdx}`);
+
+      if (currentEl) {
+        currentEl.classList.remove('scene-active');
+        currentEl.classList.add('scene-hidden');
+      }
+      if (nextEl) {
+        nextEl.classList.remove('scene-hidden');
+        nextEl.classList.add('scene-active');
+      }
+
+      indicators.forEach((ind, i) => {
+        if (i === newIdx) {
+          ind.classList.add('bg-saffron', 'text-white', 'font-bold');
+          ind.classList.remove('bg-espresso/10');
+        } else {
+          ind.classList.remove('bg-saffron', 'text-white', 'font-bold');
+          ind.classList.add('bg-espresso/10');
+        }
+      });
+
+      activeSceneIdx = newIdx;
+      sceneBadgeEl.textContent = `Scene ${newIdx + 1} of ${scenes.length}`;
+      playTone(520 + (newIdx * 45), 'triangle', 0.22);
+    }
+
+    function jumpToScene(idx) {
+      currentTime = getSceneStartTime(idx);
+      switchScene(idx);
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const { index, scene } = getSceneAtTime(currentTime);
+      switchScene(index);
+      
+      voiceoverTextEl.textContent = scene.subtitles;
+      const pct = Math.min(100, (currentTime / totalDuration) * 100);
+      progressBar.style.width = `${pct}%`;
+      timeElapsedEl.textContent = formatTime(currentTime);
+    }
+
+    let conveyorAnimTime = 0;
+    const movingPapers = document.querySelectorAll('.animated-paper');
+    const svgNeedle = document.getElementById('svgNeedle');
+
+    function animateConveyor(dt) {
+      conveyorAnimTime += dt;
+      
+      // Animate paper records sliding rightwards along conveyor
+      if (movingPapers.length > 0) {
+        movingPapers.forEach((paper, idx) => {
+          const baseOffset = (conveyorAnimTime * 45 + (idx * 110)) % 250;
+          const currentX = 80 + baseOffset;
+          paper.setAttribute('transform', `translate(${currentX}, 140)`);
+        });
+      }
+
+      // Gently animate needle dial angle to simulate dynamic risk score
+      if (svgNeedle) {
+        const needleAngle = 25 + Math.sin(conveyorAnimTime * 2.5) * 18;
+        svgNeedle.setAttribute('transform', `rotate(${needleAngle}, 60, 80)`);
+      }
+    }
+
+    // Playback loop
+    function animationStep(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const dt = Math.min((timestamp - lastTimestamp) / 1000, 0.1);
+      lastTimestamp = timestamp;
+
+      animateConveyor(dt);
+
+      if (isPlaying) {
+        currentTime += dt;
+        if (isHeroConveyorMode) {
+          // Loop continuously within Scene 2 in hero loop mode
+          const s1Start = getSceneStartTime(1);
+          const s1End = s1Start + scenes[1].duration;
+          if (currentTime < s1Start || currentTime >= s1End) {
+            currentTime = s1Start;
+          }
+        } else if (currentTime >= totalDuration) {
+          currentTime = totalDuration;
+          isPlaying = false;
+          playPauseBtn.textContent = '▶';
+        }
+        updateDisplay();
+      }
+
+      requestAnimationFrame(animationStep);
+    }
+    requestAnimationFrame(animationStep);
+
+    playPauseBtn.addEventListener('click', () => {
+      initAudio();
+      isPlaying = !isPlaying;
+      playPauseBtn.textContent = isPlaying ? '⏸' : '▶';
+      if (currentTime >= totalDuration) {
+        currentTime = 0;
+        isPlaying = true;
+        playPauseBtn.textContent = '⏸';
+      }
+    });
+
+    replayBtn.addEventListener('click', () => {
+      jumpToScene(0);
+      isPlaying = true;
+      playPauseBtn.textContent = '⏸';
+    });
+
+    prevSceneBtn.addEventListener('click', () => {
+      const prev = Math.max(0, activeSceneIdx - 1);
+      jumpToScene(prev);
+    });
+
+    nextSceneBtn.addEventListener('click', () => {
+      const next = Math.min(scenes.length - 1, activeSceneIdx + 1);
+      jumpToScene(next);
+    });
+
+    soundToggleBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundToggleBtn.textContent = soundEnabled ? '🔊 Sound On' : '🔇 Muted';
+      if (soundEnabled) playTone(650, 'sine', 0.15);
+    });
+
+    if (heroModeToggleBtn) heroModeToggleBtn.addEventListener('click', () => {
+      isHeroConveyorMode = !isHeroConveyorMode;
+      if (isHeroConveyorMode) {
+        jumpToScene(1);
+        heroModeLabel.textContent = 'Exit Loop Mode';
+        heroModeToggleBtn.classList.add('bg-saffron', 'text-espresso', 'font-bold');
+      } else {
+        heroModeLabel.textContent = 'Conveyor Loop Mode';
+        heroModeToggleBtn.classList.remove('bg-saffron', 'text-espresso', 'font-bold');
+      }
+    });
+
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / rect.width;
+      currentTime = Math.max(0, Math.min(totalDuration, pos * totalDuration));
+      updateDisplay();
+    });
+
+    const canvas = document.getElementById('canvasFx');
+    const ctx = canvas.getContext('2d');
+    let canvasTime = 0;
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Topographic contours + glowing data intelligence nodes
+    const dataNodes = [
+      { x: 0.18, y: 0.28, radius: 4, color: '#F5900A', pulse: 0 },
+      { x: 0.35, y: 0.72, radius: 3.5, color: '#1F5D66', pulse: 1 },
+      { x: 0.62, y: 0.35, radius: 4.5, color: '#F5900A', pulse: 2 },
+      { x: 0.82, y: 0.65, radius: 3.5, color: '#1F5D66', pulse: 0.5 },
+      { x: 0.50, y: 0.50, radius: 5, color: '#F5900A', pulse: 1.5 }
+    ];
+
+    function renderCanvasFx() {
+      canvasTime += 0.008;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Draw subtle drifting topographic contour lines
+      ctx.save();
+      ctx.lineWidth = 1.2;
+      for (let i = 1; i <= 6; i++) {
+        ctx.beginPath();
+        const baseOffset = i * 45;
+        const drift = Math.sin(canvasTime + i) * 20;
+
+        ctx.strokeStyle = `rgba(31, 93, 102, ${0.045 + (i * 0.008)})`;
+        ctx.moveTo(0, h * 0.2 + baseOffset + drift);
+
+        ctx.bezierCurveTo(
+          w * 0.25, h * 0.15 + baseOffset - drift,
+          w * 0.55, h * 0.35 + baseOffset + drift * 0.5,
+          w, h * 0.25 + baseOffset - drift
+        );
+        ctx.stroke();
+      }
+
+      // Reverse elevation contours
+      for (let j = 1; j <= 5; j++) {
+        ctx.beginPath();
+        const baseOffset = j * 50;
+        const drift = Math.cos(canvasTime * 0.8 + j) * 18;
+
+        ctx.strokeStyle = `rgba(245, 144, 10, ${0.035 + (j * 0.007)})`;
+        ctx.moveTo(0, h * 0.85 - baseOffset + drift);
+
+        ctx.bezierCurveTo(
+          w * 0.35, h * 0.75 - baseOffset - drift,
+          w * 0.65, h * 0.90 - baseOffset + drift,
+          w, h * 0.70 - baseOffset - drift
+        );
+        ctx.stroke();
+      }
+      ctx.restore();
+
+      // Draw connected data intelligence nodes with gentle glowing halos
+      dataNodes.forEach((node, i) => {
+        const nx = node.x * w;
+        const ny = node.y * h + Math.sin(canvasTime * 2 + node.pulse) * 6;
+
+        // Thin connecting lines between adjacent nodes
+        if (i < dataNodes.length - 1) {
+          const next = dataNodes[i + 1];
+          const mx = next.x * w;
+          const my = next.y * h + Math.sin(canvasTime * 2 + next.pulse) * 6;
+          ctx.beginPath();
+          ctx.strokeStyle = 'rgba(31, 93, 102, 0.08)';
+          ctx.lineWidth = 1;
+          ctx.moveTo(nx, ny);
+          ctx.lineTo(mx, my);
+          ctx.stroke();
+        }
+
+        // Glowing outer halo
+        const haloRadius = node.radius * (2.2 + Math.sin(canvasTime * 3 + node.pulse) * 0.6);
+        const grad = ctx.createRadialGradient(nx, ny, 0, nx, ny, haloRadius);
+        grad.addColorStop(0, node.color === '#F5900A' ? 'rgba(245, 144, 10, 0.35)' : 'rgba(31, 93, 102, 0.35)');
+        grad.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(nx, ny, haloRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Node center
+        ctx.fillStyle = node.color;
+        ctx.beginPath();
+        ctx.arc(nx, ny, node.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      requestAnimationFrame(renderCanvasFx);
+    }
+    renderCanvasFx();
+  </script>
+</body>
+</html>
